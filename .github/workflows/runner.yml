@@ -1,0 +1,23 @@
+name: Helm Upgrade
+
+on:
+  push:
+    paths:
+      - 'values.yaml'
+
+jobs:
+  helm_upgrade:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        helm version # Verify Helm is installed
+
+    - name: Helm Upgrade
+      run: |
+        helm upgrade prometheus prometheus/ -f values.yaml
+
