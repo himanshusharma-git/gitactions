@@ -19,7 +19,7 @@ jobs:
 
     - name: Update EKS Cluster
       run: |
-        aws eks update-kubeconfig --name dev-infra-k8s-ops --region us-west-2
+        aws eks update-kubeconfig --name dev-infra-k8s-ops --region us
 
     - name: Helm Upgrade
       run: |
