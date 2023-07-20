@@ -12,12 +12,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     
-   - name: configureawscredentials
-     uses: aws-actions/configure-aws-credentials@v1
-     with:
-       role-to-assume: arn:aws:iam::694702677705:role/gitactions
-       role-session-name: samplerolesession
-       aws-region: us-west-2
+    - name: configureawscredentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::694702677705:role/gitactions
+        role-session-name: samplerolesession
+        aws-region: us-west-2
 
     - name: Install Helm
       run: |
