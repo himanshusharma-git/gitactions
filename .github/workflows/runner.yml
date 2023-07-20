@@ -20,6 +20,7 @@ jobs:
       - name: Git clone the repository
         uses: actions/checkout@v3
       - name: Configure AWS credentials
+        id: aws_credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
           role-to-assume: arn:aws:iam::694702677705:role/gitactions # Change to reflect your IAM role?s ARN
@@ -35,6 +36,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Set AWS environment variables
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ steps.aws_credentials.outputs.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ steps.aws_credentials.outputs.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_SESSION_TOKEN=${{ steps.aws_credentials.outputs.AWS_SESSION_TOKEN }}" >> $GITHUB_ENV
 
       - name: Install Helm
         run: |
