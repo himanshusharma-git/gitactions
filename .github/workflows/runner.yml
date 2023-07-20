@@ -11,16 +11,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    env:
-     AWS_DEFAULT_REGION: us-west-2
     
-    steps:
    - name: configureawscredentials
      uses: aws-actions/configure-aws-credentials@v1
      with:
        role-to-assume: arn:aws:iam::694702677705:role/gitactions
        role-session-name: samplerolesession
-       aws-region: ${{env.AWS_DEFAULT_REGION}}
+       aws-region: us-west-2
 
     - name: Install Helm
       run: |
