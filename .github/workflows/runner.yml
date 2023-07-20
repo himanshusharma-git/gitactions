@@ -30,10 +30,10 @@ jobs:
         id: aws_credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::694702677705:role/gitactions # Change to reflect your IAM role?s ARN
+          role-to-assume: arn:aws:iam::694702677705:role/gitactions # Change to reflect your IAM role's ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-          external-id: ${{ secrets.AWS_EXTERNAL_ID }} # Use the External ID secret
+          role-external-id: ${{ secrets.AWS_EXTERNAL_ID }} # Use the External ID secret
       - name: Store AWS credentials
         run: |
           echo "AWS_ACCESS_KEY_ID=${{ steps.aws_credentials.outputs.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV

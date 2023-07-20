@@ -1098,8 +1098,6 @@ serverFiles:
 # Adds option to add alert_relabel_configs to avoid duplicate alerts in alertmanager
 #
 
-       
-
       
 alertRelabelConfigs: {}
   # alert_relabel_configs:
