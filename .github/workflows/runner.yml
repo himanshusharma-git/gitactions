@@ -18,6 +18,8 @@ jobs:
         role-to-assume: arn:aws:iam::694702677705:role/gitactions
         role-session-name: samplerolesession
         aws-region: us-west-2
+        audience: sts.amazonaws.com
+
 
     - name: Install Helm
       run: |
