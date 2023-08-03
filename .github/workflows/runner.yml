@@ -19,6 +19,7 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           audience: sts.amazonaws.com
           role-external-id: ${{ secrets.AWS_EXTERNAL_ID }}
+          aws-region: us-west-2
 
       - name: Run AWS CLI Command
         run: |
