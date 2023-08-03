@@ -1,52 +1,27 @@
-env:
-  AWS_REGION: us-west-2 # Change to reflect your Region
-
-# Permission can be added at job level or workflow level
-permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
-
-name: Helm Upgrade
+name: AWS Role Assumption
 
 on:
   push:
     paths:
-      - 'values.yaml'
+      - 'values.yaml' # Adjust the file path as needed
 
 jobs:
-  AssumeRoleAndCallIdentity:
+  assume-role:
     runs-on: ubuntu-latest
     steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
-      - name: Set up AWS CLI
-        run: |
-          echo "AWS_REGION=${{ env.AWS_REGION }}" >> $GITHUB_ENV
-          echo "AWS_DEFAULT_REGION=${{ env.AWS_REGION }}" >> $GITHUB_ENV
-          echo "AWS_ACCESS_KEY_ID=" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=" >> $GITHUB_ENV
-          echo "AWS_SESSION_TOKEN=" >> $GITHUB_ENV
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
       - name: Configure AWS credentials
-        id: aws_credentials
-        uses: aws-actions/configure-aws-credentials@v1 # Use the latest version if available
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::694702677705:role/gitactions
+          role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/gitactions # Replace YOUR_ACCOUNT_ID
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: ${{ env.AWS_REGION }}
-          external-id: ${{ secrets.AWS_EXTERNAL_ID }} # Use the updated 'external-id' parameter
-      - name: Store AWS credentials
+          audience: sts.amazonaws.com
+          role-external-id: ${{ secrets.AWS_EXTERNAL_ID }}
+
+      - name: Run AWS CLI Command
         run: |
-          echo "AWS_ACCESS_KEY_ID=${{ steps.aws_credentials.outputs.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=${{ steps.aws_credentials.outputs.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "AWS_SESSION_TOKEN=${{ steps.aws_credentials.outputs.AWS_SESSION_TOKEN }}" >> $GITHUB_ENV
-      - name: Install Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-          helm version
-      - name: Update EKS Cluster
-        run: |
-          aws eks update-kubeconfig --name dev-infra-k8s-ops --region ${{ env.AWS_REGION }}
-      - name: Helm Upgrade
-        run: |
-          helm upgrade prometheus prometheus/ -f values.yaml
+          aws sts get-caller-identity
+          # Add more AWS CLI commands as needed
 
