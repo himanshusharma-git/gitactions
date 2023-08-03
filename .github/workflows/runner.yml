@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
+      - name: Unset AWS Credentials
+        run: echo "::unset-env AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN::"
+
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
